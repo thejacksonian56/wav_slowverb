@@ -24,9 +24,11 @@ namespace WAVSlowVerb
     }
     public class Functions
     {
+        public int slowRate = 1;
         public ReaderWAV reader = new ReaderWAV();
         public string path;
         public string new_path;
+        public short[] og;
         public void Open()
         {
             path = " ";
@@ -41,6 +43,7 @@ namespace WAVSlowVerb
                 path = open.FileName;
                 reader.readAll(@path);
             }
+            og = reader.audio;
         }
         public void Save()
         {
@@ -72,7 +75,14 @@ namespace WAVSlowVerb
         }
         public void Slow()
         {
-            int newLength = Convert.ToInt32(reader.audio.Length * 1.20);
+            double slowRate2 = slowRate;
+            slowRate2 = slowRate2 / 10;
+            bool same = (slowRate2 == 0.1) || (slowRate2 == 1);
+            if (same)
+            {
+                slowRate2 = 1;
+            }
+            int newLength = Convert.ToInt32(og.Length * (2 - slowRate2));
             short[] newData = new short[newLength];
             int y = 0;
             int z = 0;
@@ -100,15 +110,15 @@ namespace WAVSlowVerb
                         j = x;
                         add = false;
                     }
-                    newData[i + j] = Convert.ToInt16(reader.audio[z]);
+                    newData[i + j] = Convert.ToInt16(og[z]);
                     z++;
                     y++;
-                    if (y == 8)
+                    if (y == Convert.ToInt16((10 * slowRate2)) && same == false)
                     {
                         test = z;
-                        newData[i + j + 1] = (short)(((reader.audio[z - 2]) + (reader.audio[z])) / 2);
+                        newData[i + j + 1] = (short)(((og[z - 2]) + (og[z])) / 2);
                         i++;
-                        newData[i + j + 1] = (short)(((reader.audio[z+1]) + (reader.audio[z-1])) / 2);
+                        newData[i + j + 1] = (short)(((og[z+1]) + (og[z-1])) / 2);
                         i++;
                         z = test;
                         y = 0;
