@@ -45,6 +45,7 @@ namespace WAVSlowVerb
         private void button4_Click(object sender, EventArgs e)
         {
             functions.Slow();
+            label1.Text = "Slowed Successful";
         }
     }
 }
