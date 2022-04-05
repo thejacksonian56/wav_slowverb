@@ -76,7 +76,10 @@ namespace WAVSlowVerb
             short[] newData = new short[newLength];
             int y = 0;
             int z = 0;
-            for (int i = 0; i < newData.Length; i++)
+            int x = 0;
+            int test = 0;
+            bool add = false;
+            /*for (int i = 0; i < newData.Length; i++)
             {
                 newData[i] = Convert.ToInt16(reader.audio[z]);
                 y++;
@@ -86,6 +89,40 @@ namespace WAVSlowVerb
                     newData[i + 1] = (short)((reader.audio[z] + reader.audio[z+1]) / 2);
                     y = 0;
                     i++;
+                }
+            }*/
+            for (int i = 0; i < newData.Length - 6; i += reader.numChannels)
+            {
+                for (int j = 0; j < reader.numChannels; j++)
+                {
+                    if (add == true)
+                    {
+                        j = x;
+                        add = false;
+                    }
+                    newData[i + j] = Convert.ToInt16(reader.audio[z]);
+                    z++;
+                    y++;
+                    if (y == 8)
+                    {
+                        test = z;
+                        newData[i + j + 1] = (short)(((reader.audio[z - 2]) + (reader.audio[z])) / 2);
+                        i++;
+                        newData[i + j + 1] = (short)(((reader.audio[z+1]) + (reader.audio[z-1])) / 2);
+                        i++;
+                        z = test;
+                        y = 0;
+                        add = true;
+                        if (j == 0)
+                        {
+                            x = 1;
+                        }
+                        if (j == 1)
+                        {
+                            x = 0;
+                        }
+
+                    }
                 }
             }
             reader.audio = newData;
