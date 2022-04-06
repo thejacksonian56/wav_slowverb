@@ -45,6 +45,7 @@ namespace WAVSlowVerb
         private void button4_Click(object sender, EventArgs e)
         {
             functions.Slow();
+            functions.addReverb();
             label1.Text = "Slowed Successful";
         }
 
@@ -52,6 +53,24 @@ namespace WAVSlowVerb
         {
             label3.Text = (trackBar1.Value * 10) + "%";
             functions.slowRate = trackBar1.Value;
+        }
+
+        private void trackBar4_Scroll(object sender, EventArgs e)
+        {
+            label7.Text = trackBar4.Value + "%";
+            functions.mix = (trackBar4.Value / 100);
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            label8.Text = Convert.ToString(((float)trackBar2.Value) / 100);
+            functions.decay = trackBar2.Value / 100;
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            label9.Text = trackBar3.Value + "ms";
+            functions.delay = trackBar3.Value;
         }
     }
 }
